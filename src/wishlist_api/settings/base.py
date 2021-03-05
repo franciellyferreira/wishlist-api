@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
 
 ALLOWED_HOSTS = []
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -14,6 +14,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+OUTSIDE_APPS = [
+    'rest_framework',
+]
+
+CHALLENGE_APPS = [
+    'wishlist_api.client.apps.ClientConfig',
+]
+
+INSTALLED_APPS = DJANGO_APPS + OUTSIDE_APPS + CHALLENGE_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -25,7 +35,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'wishlist.urls'
+ROOT_URLCONF = 'wishlist_api.urls'
 
 TEMPLATES = [
     {
@@ -43,7 +53,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'wishlist.wsgi.application'
+WSGI_APPLICATION = 'wishlist_api.wsgi.application'
 
 DATABASES = {
     'default': {
