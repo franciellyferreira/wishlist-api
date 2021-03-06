@@ -18,9 +18,6 @@ class ClientListCreateView(ListCreateAPIView):
     queryset = Client.objects.all().order_by('name')
 
     def get(self, request, *args, **kwargs):
-        """
-            List all clients with pagination.
-        """
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
 
@@ -41,9 +38,6 @@ class ClientListCreateView(ListCreateAPIView):
         return Response(payload)
 
     def post(self, request, *args, **kwargs):
-        """
-            Register new client.
-        """
         serializer = ClientSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -58,16 +52,39 @@ class ClientRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
     serializer_class = ClientSerializer
 
-    def get_object(self, pk=None):
+    def get_object(self):
         try:
-            return Client.objects.get(email=pk)
+            return Client.objects.get(pk=self.kwargs['pk'])
         except Client.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk=None, *args, **kwargs):
-        """
-            Search for client by email.
-        """
-        client = self.get_object(pk)
+    def get(self, request, *args, **kwargs):
+        client = self.get_object()
         serializer = ClientSerializer(client)
         return Response(serializer.data)
+
+    def put(self, request, *args, **kwargs):
+        client = self.get_object()
+        serializer = ClientSerializer(client, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, *args, **kwargs):
+        client = self.get_object()
+        serializer = ClientSerializer(client, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        client = self.get_object()
+        client.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
