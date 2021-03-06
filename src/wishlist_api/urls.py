@@ -3,5 +3,5 @@ from django.urls import include
 
 
 urlpatterns = [
-    url(r'^wishlist/client/', include('wishlist_api.client.urls')),
+    url(r'^wishlist/', include('wishlist_api.client.urls')),
 ]
