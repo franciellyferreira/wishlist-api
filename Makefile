@@ -52,3 +52,6 @@ test-coverage: clean ## Calculate all test coverage
 
 test-coverage-html: clean ## Calculate all test coverage and generate report html
 	pytest -x --cov=src/wishlist_api/ --cov-config=.coveragerc --cov-report=html:htmlcov
+
+generate-key:  ## Generate secret key
+	python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
