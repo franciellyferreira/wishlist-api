@@ -7,13 +7,16 @@ from rest_framework.generics import (
 from rest_framework.response import Response
 
 from wishlist_api.client.models import Client
-from wishlist_api.client.serializers import ClientSerializer
+from wishlist_api.client.serializers import (
+    ClientSerializer,
+    ClientOutputSerializer
+)
 from wishlist_api.pagination import CustomPagination
 
 
 class ClientListCreateView(ListCreateAPIView):
 
-    serializer_class = ClientSerializer
+    serializer_class = ClientOutputSerializer
     pagination_class = CustomPagination
     queryset = Client.objects.all().order_by('name')
 
@@ -42,7 +45,7 @@ class ClientListCreateView(ListCreateAPIView):
 
         if serializer.is_valid():
             client = serializer.save()
-            serializer = ClientSerializer(client)
+            serializer = ClientOutputSerializer(client)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -60,7 +63,7 @@ class ClientRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
     def get(self, request, *args, **kwargs):
         client = self.get_object()
-        serializer = ClientSerializer(client)
+        serializer = ClientOutputSerializer(client)
         return Response(serializer.data)
 
     def put(self, request, *args, **kwargs):

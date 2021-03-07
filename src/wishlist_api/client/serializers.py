@@ -8,3 +8,10 @@ class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = ('id', 'name', 'email',)
+
+
+class ClientOutputSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Client
+        fields = ('id', 'name', 'email', 'created_at', 'updated_at')
