@@ -55,3 +55,7 @@ test-coverage-html: clean ## Calculate all test coverage and generate report htm
 
 generate-key:  ## Generate secret key
 	python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+
+shell:
+	@echo 'Loading shell with settings = $(settings)'
+	django-admin shell -i ipython
