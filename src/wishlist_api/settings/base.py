@@ -92,3 +92,11 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'wishlist_api.pagination.CustomPagination'
 }
+
+
+API_PRODUCT_MAGALU = {
+    'API_PRODUCT_MAGALU': {
+        'url': 'http://challenge-api.luizalabs.com',
+        'timeout': 10
+    }
+}

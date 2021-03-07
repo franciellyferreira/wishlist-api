@@ -7,7 +7,7 @@ class ClientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Client
-        fields = ('id', 'name', 'email',)
+        fields = ('name', 'email')
 
 
 class ClientOutputSerializer(serializers.ModelSerializer):
