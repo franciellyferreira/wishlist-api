@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 # SQLite3 Database
-db.sqlite3
+wishlist.db
 
 # Pycharm configs
 .idea/

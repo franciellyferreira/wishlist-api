@@ -1,5 +1,7 @@
 import os
 
+import dj_database_url
+
 LANGUAGE_CODE = 'pt-BR'
 TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
@@ -16,6 +18,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
     os.path.abspath(__file__)
 ))))
 
+DATABASE_URI = os.environ.get('DATABASE_URI', 'sqlite:///wishlist.db')
+
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -31,6 +35,7 @@ OUTSIDE_APPS = [
 
 CHALLENGE_APPS = [
     'wishlist_api.client.apps.ClientConfig',
+    'wishlist_api.wishlist.apps.WishlistConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + OUTSIDE_APPS + CHALLENGE_APPS
@@ -66,10 +71,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'wishlist_api.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.parse(DATABASE_URI)
 }
 
 AUTH_PASSWORD_VALIDATORS = [

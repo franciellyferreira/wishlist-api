@@ -17,10 +17,6 @@ class Wishlist(models.Model):
 
     class Meta:
         db_table = 'wishlist'
-        models.UniqueConstraint(
-            fields=['client_id', 'product_id'],
-            name='unique_wishlist_by_client'
-        )
 
     def __str__(self):
         return f'{self.client_id} - {self.product_id}'
