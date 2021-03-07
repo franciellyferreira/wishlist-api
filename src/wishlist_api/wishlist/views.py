@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView
 from rest_framework.response import Response
 
-from wishlist_api.extensions.products.client import get_product_from_magalu
+from wishlist_api.extensions.magalu.client import get_product_from_magalu
 from wishlist_api.pagination import CustomPagination
 from wishlist_api.wishlist.helpers import (
     get_item_wishlist,
@@ -42,7 +42,7 @@ class WishlistCreateView(CreateAPIView):
 
             if serializer.is_valid():
                 wishlist = serializer.save()
-                serializer = WishlistSerializer(wishlist)
+                serializer = WishlistOutputSerializer(wishlist)
                 logger.info('Product added in wishlist', data=request.data)
                 return Response(
                     data=serializer.data,

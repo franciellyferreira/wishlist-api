@@ -4,7 +4,7 @@ import structlog
 import requests
 from simple_settings import settings
 
-from wishlist_api.extensions.products.exceptions import ProductAPIException
+from wishlist_api.extensions.magalu.exceptions import ProductAPIException
 
 logger = structlog.get_logger()
 
