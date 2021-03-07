@@ -1,0 +1,34 @@
+import uuid
+
+from django.db import models
+
+
+class Wishlist(models.Model):
+
+    id = models.AutoField(primary_key=True)
+    client = models.ForeignKey(
+        'client.Client',
+        related_name='clients',
+        on_delete=models.PROTECT,
+        db_index=True
+    )
+    product_id = models.UUIDField(default=uuid.uuid4, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'wishlist'
+        models.UniqueConstraint(
+            fields=['client_id', 'product_id'],
+            name='unique_wishlist_by_client'
+        )
+
+    def __str__(self):
+        return f'{self.client_id} - {self.product_id}'
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'client_id': self.client_id,
+            'product_id': self.product_id,
+            'created_at': self.created_at
+        }
