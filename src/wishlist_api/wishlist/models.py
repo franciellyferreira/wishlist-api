@@ -9,7 +9,7 @@ class Wishlist(models.Model):
     client = models.ForeignKey(
         'client.Client',
         related_name='clients',
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         db_index=True
     )
     product_id = models.UUIDField(default=uuid.uuid4, db_index=True)
