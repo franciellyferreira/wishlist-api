@@ -1,6 +1,7 @@
+from typing import Any
+
 import structlog
 
-from django.http import Http404
 from rest_framework import status
 from rest_framework.generics import (
     ListCreateAPIView,
@@ -46,47 +47,73 @@ class ClientListCreateView(ListCreateAPIView):
             client = serializer.save()
             serializer = ClientOutputSerializer(client)
             logger.info('Client created with success', client=request.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(
+                data=serializer.data,
+                status=status.HTTP_201_CREATED
+            )
 
         logger.warning('Fail to created client', client=request.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            data=serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class ClientRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
     serializer_class = ClientSerializer
 
+    def _update_client(
+            self,
+            client_id: int,
+            request: Any,
+            partial: bool = False
+    ) -> Response:
+        client = get_client(pk=client_id)
+        serializer = ClientSerializer(
+            client,
+            data=request.data,
+            partial=partial
+        )
+        if serializer.is_valid():
+            serializer.save()
+            logger.info(
+                'Client update with success',
+                client=request.data,
+                partial=partial
+            )
+            return Response(
+                data=serializer.data,
+                status=status.HTTP_204_NO_CONTENT
+            )
+
+        logger.info(
+            'Fail to update why client data is invalid.',
+            client=request.data,
+            partial=partial
+        )
+        return Response(
+            data=serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
     def get(self, request, *args, **kwargs):
         client_id = self.kwargs['pk']
         client = get_client(pk=client_id)
         serializer = ClientOutputSerializer(client)
-        return Response(serializer.data)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, *args, **kwargs):
         client_id = self.kwargs['pk']
-        client = get_client(pk=client_id)
-        serializer = ClientSerializer(client, data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            logger.info('Client updated with success', client=request.data)
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-
-        logger.warning('Fail to updated client', client=request.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return self._update_client(client_id=client_id, request=request)
 
     def patch(self, request, *args, **kwargs):
         client_id = self.kwargs['pk']
-        client = get_client(pk=client_id)
-        serializer = ClientSerializer(client, data=request.data, partial=True)
-
-        if serializer.is_valid():
-            serializer.save()
-            logger.info('Client patched with success', client=request.data)
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-
-        logger.warning('Fail to patched client', client=request.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return self._update_client(
+            client_id=client_id,
+            request=request,
+            partial=True
+        )
 
     def delete(self, request, *args, **kwargs):
         client_id = self.kwargs['pk']

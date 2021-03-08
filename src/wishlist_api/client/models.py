@@ -11,14 +11,12 @@ class Client(models.Model):
     class Meta:
         db_table = 'client'
 
-    def __str__(self):
-        return self.email
-
     def as_dict(self):
         return {
             'id': self.id,
             'name': self.name,
-            'email': self.email,
-            'created_at': self.created_at,
-            'update_at': self.updated_at
+            'email': self.email
         }
+
+    def __str__(self):
+        return '<Client {}>'.format(self.as_dict())
