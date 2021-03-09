@@ -8,8 +8,8 @@
 [![Documentation](https://img.shields.io/badge/docs-passing-brightgreen)](https://documenter.getpostman.com/view/2628786/Tz5jf1Ne)
 
 Wishlist API foi desenvolvida para apoiar as ações de marketing da empresa. 
-Ela oferece funcionalidades para manipular a lista de produtos favoritos dos 
-clientes da plataforma.
+Ela oferece funcionalidades para manipular clientes e a lista de produtos 
+favoritos deles na plataforma.
 
 
 ### Documentação
@@ -21,7 +21,7 @@ Para usar o API e consultar os endpoints acesse a
 ### O que você precisa para executar esse projeto?
 
 - Versão Python do projeto
-  - [Versão recomandada](runtime.txt)
+  - [Versão recomendada](runtime.txt)
 
 - Criar ambiente virtual
   - Recomendo o uso do [PyEnv](https://github.com/pyenv/pyenv)
@@ -50,7 +50,7 @@ Para usar o API e consultar os endpoints acesse a
   - Rodar o comando:
     > make generate-key
       
-  - Copiar chave gerada e colar no substituir no *base.py*:
+  - Copiar chave gerada e substituir no *base.py*:
     ```
     SECRET_KEY = 'chave'
     ```
@@ -62,8 +62,9 @@ Para usar o API e consultar os endpoints acesse a
 
 ### Make
 
-Para facilitar na manutenção e desenvolvimento do código, foi adicionado o Makefile
-para disponibilizar os principais comandos úteis. 
+Para facilitar a manutenção e o desenvolvimento do código, foi adicionado o 
+Makefile. Ele disponibiliza os principais comandos úteis para trabalhar com 
+este projeto.
 
 - Listar todos:
   > make
@@ -79,13 +80,14 @@ make create-app | Cria um novo app
 make generate-key | Gera uma secret_key
 make help | Lista todos os comandos do make
 make install | Instala as dependências
+make lint | Verifica padrão PEP8 e ordenação dos imports
 make migrate | Gera as migrations
 make migrations | Instala as migrations
 make runserver | Rodar o projeto
 make safety-check | Verificar versões das dependências
+make shell | Acessa o shell do Python
 make test | Rodar todos os testes
-make test-coverage | Rodar os testes e verificar a cobertura
-make test-coverage-html | Rodar os testes, verificar a cobertura e gerar html
+make test-coverage | Rodar os testes, verificar a cobertura e gerar html
 
 
 ## Licença

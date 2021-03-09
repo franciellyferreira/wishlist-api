@@ -23,6 +23,14 @@ clean: ## Clean local environment
 	@rm -f coverage.xml
 	@rm -f *.log
 
+shell:  ## Access Python shell
+	@echo 'Loading shell with settings = $(settings)'
+	django-admin shell -i ipython
+
+lint:  ## Verify PEP8 and sort of imports
+	flake8 --show-source src/ --exclude=*/migrations/*
+	isort src/ -m 3
+
 install:  ## Install dependencies
 	pip install -U -r requirements/dev.txt
 
@@ -47,19 +55,8 @@ migrations:  ## Generate migrations
 test: clean  ## Run tests
 	pytest -x
 
-test-coverage: clean ## Calculate all test coverage
-	pytest -x --cov=src/wishlist_api/ --cov-config=.coveragerc --cov-report=xml --cov-report=term-missing
-
-test-coverage-html: clean ## Calculate all test coverage and generate report html
+test-coverage: clean ## Calculate all test coverage and generate report html
 	pytest -x --cov=src/wishlist_api/ --cov-config=.coveragerc --cov-report=html:htmlcov
 
 generate-key:  ## Generate secret key
 	python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
-
-shell:
-	@echo 'Loading shell with settings = $(settings)'
-	django-admin shell -i ipython
-
-lint:
-	flake8 --show-source src/ --exclude=*/migrations/*
-	isort src/ -m 3
