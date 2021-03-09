@@ -1,6 +1,5 @@
 import structlog
 from django.http import Http404
-
 from rest_framework import status
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView
 from rest_framework.response import Response
@@ -11,14 +10,14 @@ from wishlist_api.extensions.magalu.exceptions import MagaluProductAPIException
 from wishlist_api.extensions.magalu.models import Product
 from wishlist_api.pagination import CustomPagination
 from wishlist_api.wishlist.helpers import (
-    get_item_wishlist,
-    filter_items_wishlist_by_client
+    filter_items_wishlist_by_client,
+    get_item_wishlist
 )
 from wishlist_api.wishlist.models import Wishlist
 from wishlist_api.wishlist.serializers import (
-    WishlistSerializer,
+    WishlistDescriptionOutputSerializer,
     WishlistOutputSerializer,
-    WishlistDescriptionOutputSerializer
+    WishlistSerializer
 )
 
 logger = structlog.getLogger()

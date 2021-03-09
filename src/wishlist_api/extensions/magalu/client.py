@@ -1,7 +1,7 @@
 import uuid
-import structlog
 
 import requests
+import structlog
 from simple_settings import settings
 
 from wishlist_api.extensions.magalu.exceptions import MagaluProductAPIException

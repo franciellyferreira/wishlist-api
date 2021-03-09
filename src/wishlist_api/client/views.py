@@ -1,7 +1,6 @@
 from typing import Any
 
 import structlog
-
 from rest_framework import status
 from rest_framework.generics import (
     ListCreateAPIView,
@@ -12,8 +11,8 @@ from rest_framework.response import Response
 from wishlist_api.client.helpers import get_client
 from wishlist_api.client.models import Client
 from wishlist_api.client.serializers import (
-    ClientSerializer,
-    ClientOutputSerializer
+    ClientOutputSerializer,
+    ClientSerializer
 )
 from wishlist_api.pagination import CustomPagination
 

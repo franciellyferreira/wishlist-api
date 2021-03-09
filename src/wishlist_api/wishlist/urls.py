@@ -2,10 +2,9 @@ from django.urls import path
 
 from wishlist_api.wishlist.views import (
     WishlistCreateView,
-    WishlistListView,
-    WishlistDestroyView
+    WishlistDestroyView,
+    WishlistListView
 )
-
 
 urlpatterns = [
     path(

@@ -59,3 +59,7 @@ generate-key:  ## Generate secret key
 shell:
 	@echo 'Loading shell with settings = $(settings)'
 	django-admin shell -i ipython
+
+lint:
+	flake8 --show-source src/ --exclude=*/migrations/*
+	isort src/ -m 3

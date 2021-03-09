@@ -5,7 +5,6 @@ from wishlist_api.client.views import (
     ClientRetrieveUpdateDestroyView
 )
 
-
 urlpatterns = [
     path(
         'client/',
