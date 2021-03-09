@@ -24,7 +24,6 @@ logger = structlog.getLogger()
 class WishlistCreateView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
-
         client_id = request.data['client']
         product_id = request.data['product_id']
 
@@ -47,7 +46,6 @@ class WishlistCreateView(CreateAPIView):
         )
         if not wishlist:
             serializer = WishlistSerializer(data=request.data)
-
             if serializer.is_valid():
                 wishlist = serializer.save()
                 serializer = WishlistOutputSerializer(wishlist)
@@ -61,7 +59,6 @@ class WishlistCreateView(CreateAPIView):
                 data=serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST
             )
-
         return Response(
             {'product_id': 'Already exists in wishlist'},
             status=status.HTTP_404_NOT_FOUND
@@ -77,7 +74,6 @@ class WishlistListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         client_id = self.kwargs['pk']
         client = get_client(pk=client_id)
-
         if client:
             queryset = self.filter_queryset(
                 filter_items_wishlist_by_client(client_id=client_id)
