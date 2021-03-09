@@ -8,3 +8,7 @@ def get_client(pk: int) -> Client:
         return Client.objects.get(pk=pk)
     except Client.DoesNotExist:
         raise Http404
+
+
+def get_all_clients():
+    return Client.objects.all().order_by('name')

@@ -1,7 +1,9 @@
-from django.conf.urls import url
-from django.urls import include
+from django.contrib import admin
+from django.urls import include, path
 
 urlpatterns = [
-    url(r'^api/', include('wishlist_api.client.urls')),
-    url(r'^api/', include('wishlist_api.wishlist.urls')),
+    path('admin/', admin.site.urls),
+    path('api/', include('wishlist_api.client.urls')),
+    path('api/', include('wishlist_api.wishlist.urls')),
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 ]

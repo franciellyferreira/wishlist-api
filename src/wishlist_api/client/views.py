@@ -1,15 +1,19 @@
 from typing import Any
 
 import structlog
+from oauth2_provider.contrib.rest_framework import (
+    OAuth2Authentication,
+    TokenHasReadWriteScope
+)
 from rest_framework import status
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView
 )
 from rest_framework.response import Response
 
-from wishlist_api.client.helpers import get_client
-from wishlist_api.client.models import Client
+from wishlist_api.client.helpers import get_client, get_all_clients
 from wishlist_api.client.serializers import (
     ClientOutputSerializer,
     ClientSerializer
@@ -21,9 +25,12 @@ logger = structlog.getLogger()
 
 class ClientListCreateView(ListCreateAPIView):
 
+    authentication_classes = [OAuth2Authentication, SessionAuthentication]
+    permission_classes = [TokenHasReadWriteScope]
     serializer_class = ClientOutputSerializer
     pagination_class = CustomPagination
-    queryset = Client.objects.all().order_by('name')
+
+    queryset = get_all_clients()
 
     def get(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -60,6 +67,8 @@ class ClientListCreateView(ListCreateAPIView):
 
 class ClientRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
+    authentication_classes = [OAuth2Authentication, SessionAuthentication]
+    permission_classes = [TokenHasReadWriteScope]
     serializer_class = ClientSerializer
 
     def _update_client(

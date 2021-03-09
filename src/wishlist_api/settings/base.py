@@ -31,6 +31,7 @@ DJANGO_APPS = [
 
 OUTSIDE_APPS = [
     'rest_framework',
+    'oauth2_provider',
 ]
 
 CHALLENGE_APPS = [
@@ -90,7 +91,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'wishlist_api.pagination.CustomPagination'
+    'DEFAULT_PAGINATION_CLASS': 'wishlist_api.pagination.CustomPagination',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ),
 }
 
 
@@ -99,4 +103,13 @@ API_MAGALU_PRODUCT = {
         'url': 'http://challenge-api.luizalabs.com',
         'timeout': 10
     }
+}
+
+OAUTH2_PROVIDER = {
+    'SCOPES': {
+        'read': 'Read scope',
+        'write': 'Write scope',
+        'groups': 'Access to your groups'
+    },
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 36000,
 }

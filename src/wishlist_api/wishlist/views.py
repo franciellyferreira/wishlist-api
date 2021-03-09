@@ -1,6 +1,11 @@
 import structlog
 from django.http import Http404
+from oauth2_provider.contrib.rest_framework import (
+    OAuth2Authentication,
+    TokenHasReadWriteScope
+)
 from rest_framework import status
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView
 from rest_framework.response import Response
 
@@ -13,7 +18,6 @@ from wishlist_api.wishlist.helpers import (
     filter_items_wishlist_by_client,
     get_item_wishlist
 )
-from wishlist_api.wishlist.models import Wishlist
 from wishlist_api.wishlist.serializers import (
     WishlistDescriptionOutputSerializer,
     WishlistOutputSerializer,
@@ -24,6 +28,9 @@ logger = structlog.getLogger()
 
 
 class WishlistCreateView(CreateAPIView):
+
+    authentication_classes = [OAuth2Authentication, SessionAuthentication]
+    permission_classes = [TokenHasReadWriteScope]
 
     def post(self, request, *args, **kwargs):
         client_id = request.data['client']
@@ -69,9 +76,10 @@ class WishlistCreateView(CreateAPIView):
 
 class WishlistListView(ListAPIView):
 
+    authentication_classes = [OAuth2Authentication, SessionAuthentication]
+    permission_classes = [TokenHasReadWriteScope]
     serializer_class = WishlistDescriptionOutputSerializer
     pagination_class = CustomPagination
-    queryset = Wishlist.objects.all().order_by('name')
 
     def get(self, request, *args, **kwargs):
         product_list = []
@@ -112,6 +120,9 @@ class WishlistListView(ListAPIView):
 
 
 class WishlistDestroyView(DestroyAPIView):
+
+    authentication_classes = [OAuth2Authentication, SessionAuthentication]
+    permission_classes = [TokenHasReadWriteScope]
 
     def delete(self, request, *args, **kwargs):
         client_id = self.kwargs['pk']
