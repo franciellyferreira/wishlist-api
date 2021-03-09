@@ -4,18 +4,18 @@ import structlog
 import requests
 from simple_settings import settings
 
-from wishlist_api.extensions.magalu.exceptions import ProductAPIException
+from wishlist_api.extensions.magalu.exceptions import MagaluProductAPIException
 
 logger = structlog.get_logger()
 
-API_PRODUCT_MAGALU = settings.API_PRODUCT_MAGALU['API_PRODUCT_MAGALU']
+API_MAGALU_PRODUCT = settings.API_MAGALU_PRODUCT['API_MAGALU_PRODUCT']
 
 
 def get_product_from_magalu(product_id: uuid.uuid4):
 
     try:
-        api_url = API_PRODUCT_MAGALU['url']
-        api_timeout = API_PRODUCT_MAGALU['timeout']
+        api_url = API_MAGALU_PRODUCT['url']
+        api_timeout = API_MAGALU_PRODUCT['timeout']
 
         url = f'{api_url}/api/product/{product_id}/'
 
@@ -27,15 +27,10 @@ def get_product_from_magalu(product_id: uuid.uuid4):
         response.raise_for_status()
 
         logger.info(
-            'Product from Magalu successfully received.',
+            'Product from Magalu successfully received',
             product_id=product_id
         )
 
         return response.json()
-    except Exception as error:
-        logger.error(
-            'Fail to get product from Magalu.',
-            product_id=product_id,
-            exc_info=True
-        )
-        raise ProductAPIException() from error
+    except Exception as exception:
+        raise MagaluProductAPIException() from exception

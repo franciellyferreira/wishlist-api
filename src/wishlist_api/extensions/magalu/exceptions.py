@@ -1,2 +1,2 @@
-class ProductAPIException(Exception):
+class MagaluProductAPIException(Exception):
     pass

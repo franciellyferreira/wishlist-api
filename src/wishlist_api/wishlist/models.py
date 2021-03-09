@@ -25,6 +25,5 @@ class Wishlist(models.Model):
         return {
             'id': self.id,
             'client_id': self.client_id,
-            'product_id': self.product_id,
-            'created_at': self.created_at
+            'product_id': self.product_id
         }

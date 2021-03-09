@@ -7,7 +7,7 @@ from wishlist_api.wishlist.models import Wishlist
 
 def get_item_wishlist(client_id: int, product_id: uuid.uuid4):
     try:
-        return Wishlist.objects.get(
+        return Wishlist.objects.filter(
             client_id=client_id,
             product_id=product_id
         )

@@ -94,8 +94,8 @@ REST_FRAMEWORK = {
 }
 
 
-API_PRODUCT_MAGALU = {
-    'API_PRODUCT_MAGALU': {
+API_MAGALU_PRODUCT = {
+    'API_MAGALU_PRODUCT': {
         'url': 'http://challenge-api.luizalabs.com',
         'timeout': 10
     }

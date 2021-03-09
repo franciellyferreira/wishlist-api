@@ -4,7 +4,9 @@ from rest_framework import status
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView
 from rest_framework.response import Response
 
+from wishlist_api.client.helpers import get_client
 from wishlist_api.extensions.magalu.client import get_product_from_magalu
+from wishlist_api.extensions.magalu.exceptions import MagaluProductAPIException
 from wishlist_api.pagination import CustomPagination
 from wishlist_api.wishlist.helpers import (
     get_item_wishlist,
@@ -23,21 +25,27 @@ class WishlistCreateView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
 
-        product_exists = True
         client_id = request.data['client']
         product_id = request.data['product_id']
 
         try:
             get_product_from_magalu(product_id=product_id)
-        except Exception:
-            product_exists = False
+        except MagaluProductAPIException:
+            logger.error(
+                'Fail during request to Magalu',
+                product_id=product_id,
+                exc_info=True
+            )
+            return Response(
+                {'product_id': 'Not found in Magalu'},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
         wishlist = get_item_wishlist(
             client_id=client_id,
             product_id=product_id
         )
-
-        if product_exists and not wishlist:
+        if not wishlist:
             serializer = WishlistSerializer(data=request.data)
 
             if serializer.is_valid():
@@ -55,10 +63,7 @@ class WishlistCreateView(CreateAPIView):
             )
 
         return Response(
-            data={
-                'message': f'Product {product_id} not exists in Magalu '
-                'or already exists in wishlist.'
-            },
+            {'product_id': 'Already exists in wishlist'},
             status=status.HTTP_404_NOT_FOUND
         )
 
@@ -71,20 +76,25 @@ class WishlistListView(ListAPIView):
 
     def get(self, request, *args, **kwargs):
         client_id = self.kwargs['pk']
-        queryset = self.filter_queryset(
-            filter_items_wishlist_by_client(client_id=client_id)
-        )
-        page = self.paginate_queryset(queryset)
+        client = get_client(pk=client_id)
 
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            result = self.get_paginated_response(serializer.data)
-            data = result.data
-        else:
-            serializer = self.get_serializer(queryset, many=True)
-            data = serializer.data
+        if client:
+            queryset = self.filter_queryset(
+                filter_items_wishlist_by_client(client_id=client_id)
+            )
+            page = self.paginate_queryset(queryset)
 
-        return Response(data=data, status=status.HTTP_200_OK)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                result = self.get_paginated_response(serializer.data)
+                data = result.data
+            else:
+                serializer = self.get_serializer(queryset, many=True)
+                data = serializer.data
+
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class WishlistDestroyView(DestroyAPIView):

@@ -14,4 +14,4 @@ class WishlistOutputSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Wishlist
-        fields = ('id', 'client', 'product_id', 'created_at')
+        fields = ('client', 'product_id', 'created_at')
