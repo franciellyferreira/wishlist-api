@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from wishlist_api.client.helpers import get_client
 from wishlist_api.extensions.magalu.client import get_product_from_magalu
 from wishlist_api.extensions.magalu.exceptions import MagaluProductAPIException
+from wishlist_api.extensions.magalu.models import Product
 from wishlist_api.pagination import CustomPagination
 from wishlist_api.wishlist.helpers import (
     get_item_wishlist,
@@ -15,7 +16,8 @@ from wishlist_api.wishlist.helpers import (
 from wishlist_api.wishlist.models import Wishlist
 from wishlist_api.wishlist.serializers import (
     WishlistSerializer,
-    WishlistOutputSerializer
+    WishlistOutputSerializer,
+    WishlistDescriptionOutputSerializer
 )
 
 logger = structlog.getLogger()
@@ -67,17 +69,28 @@ class WishlistCreateView(CreateAPIView):
 
 class WishlistListView(ListAPIView):
 
-    serializer_class = WishlistOutputSerializer
+    serializer_class = WishlistDescriptionOutputSerializer
     pagination_class = CustomPagination
     queryset = Wishlist.objects.all().order_by('name')
 
     def get(self, request, *args, **kwargs):
+        product_list = []
         client_id = self.kwargs['pk']
         client = get_client(pk=client_id)
         if client:
-            queryset = self.filter_queryset(
-                filter_items_wishlist_by_client(client_id=client_id)
-            )
+            items = filter_items_wishlist_by_client(client_id=client_id)
+            for item in items:
+                magalu_product = get_product_from_magalu(item.product_id)
+                product = Product(
+                    id=magalu_product['id'],
+                    title=magalu_product['title'],
+                    image=magalu_product['image'],
+                    price=magalu_product['price'],
+                    brand=magalu_product['brand']
+                )
+                product_list.append(product)
+
+            queryset = self.filter_queryset(product_list)
             page = self.paginate_queryset(queryset)
 
             if page is not None:
