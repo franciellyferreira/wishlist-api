@@ -1,10 +1,11 @@
 
 # Wishlist API
 
-[![made-with-python](img/made-with-python.svg)](https://www.python.org/)
-[![GPLv3 license](img/licence-gpl3.svg)](LICENSE)
-[![Documentation Status](img/docs.svg)](https://documenter.getpostman.com/view/2628786/Tz5jf1Ne)
-[![Open Source Love svg1](img/open-source.svg)](https://github.com/franciellyferreira/wishlist-api)
+[![GPLv3](https://img.shields.io/badge/licence-GPLv3-lightgrey)](LICENSE)
+[![Python](https://img.shields.io/badge/3.9.1-Python-blue)](https://www.python.org/)
+[![Django](https://img.shields.io/badge/3.0.13-Django-green)](https://www.djangoproject.com/)
+[![Django Rest Framework](https://img.shields.io/badge/3.12-Rest%20Framework-red)](https://www.django-rest-framework.org/)
+[![Documentation](https://img.shields.io/badge/docs-passing-brightgreen)](https://documenter.getpostman.com/view/2628786/Tz5jf1Ne)
 
 Wishlist API foi desenvolvida para apoiar as ações de marketing da empresa. 
 Ela oferece funcionalidades para manipular a lista de produtos favoritos dos 
