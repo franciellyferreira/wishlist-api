@@ -43,6 +43,9 @@ check:  ## Verify application
 create-app:  ## Create new app
 	django-admin startapp $(name)
 
+create-superuser:  ## Create super user
+	django-admin createsuperuser
+
 runserver:  ## Run application
 	django-admin runserver
 
