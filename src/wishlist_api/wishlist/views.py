@@ -1,4 +1,5 @@
 import structlog
+from django.http import Http404
 
 from rest_framework import status
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView
@@ -76,34 +77,39 @@ class WishlistListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         product_list = []
         client_id = self.kwargs['pk']
-        client = get_client(pk=client_id)
-        if client:
-            items = filter_items_wishlist_by_client(client_id=client_id)
-            for item in items:
-                magalu_product = get_product_from_magalu(item.product_id)
-                product = Product(
-                    id=magalu_product['id'],
-                    title=magalu_product['title'],
-                    image=magalu_product['image'],
-                    price=magalu_product['price'],
-                    brand=magalu_product['brand']
-                )
-                product_list.append(product)
 
-            queryset = self.filter_queryset(product_list)
-            page = self.paginate_queryset(queryset)
+        try:
+            get_client(pk=client_id)
+        except Http404:
+            return Response(
+                {'client_id': 'Client not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
-            if page is not None:
-                serializer = self.get_serializer(page, many=True)
-                result = self.get_paginated_response(serializer.data)
-                data = result.data
-            else:
-                serializer = self.get_serializer(queryset, many=True)
-                data = serializer.data
+        items = filter_items_wishlist_by_client(client_id=client_id)
+        for item in items:
+            magalu_product = get_product_from_magalu(item.product_id)
+            product = Product(
+                id=magalu_product['id'],
+                title=magalu_product['title'],
+                image=magalu_product['image'],
+                price=magalu_product['price'],
+                brand=magalu_product['brand']
+            )
+            product_list.append(product)
 
-            return Response(data=data, status=status.HTTP_200_OK)
+        queryset = self.filter_queryset(product_list)
+        page = self.paginate_queryset(queryset)
 
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            result = self.get_paginated_response(serializer.data)
+            data = result.data
+        else:
+            serializer = self.get_serializer(queryset, many=True)
+            data = serializer.data
+
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 class WishlistDestroyView(DestroyAPIView):
