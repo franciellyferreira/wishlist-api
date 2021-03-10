@@ -139,7 +139,7 @@ make + comando | descrição
 make check | Verifica aplicação
 make clean | Limpa variáveis de ambiente local
 make create-app | Cria um novo app
-make create-superuser ! Cria super usuário
+make create-superuser | Cria super usuário
 make generate-key | Gera uma secret_key
 make help | Lista todos os comandos do make
 make install | Instala as dependências
