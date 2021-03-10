@@ -13,7 +13,7 @@ from rest_framework.generics import (
 )
 from rest_framework.response import Response
 
-from wishlist_api.client.helpers import get_client, get_all_clients
+from wishlist_api.client.helpers import get_all_clients, get_client
 from wishlist_api.client.serializers import (
     ClientOutputSerializer,
     ClientSerializer

@@ -18,12 +18,12 @@ class Wishlist(models.Model):
     class Meta:
         db_table = 'wishlist'
 
-    def __str__(self):
-        return f'{self.client_id} - {self.product_id}'
-
     def as_dict(self):
         return {
             'id': self.id,
             'client_id': self.client_id,
             'product_id': self.product_id
         }
+
+    def __str__(self):
+        return '<Wishlist {}>'.format(self.as_dict())
