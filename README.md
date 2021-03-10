@@ -2,8 +2,8 @@
 # Wishlist API
 
 [![GPLv3](https://img.shields.io/badge/licence-GPLv3-lightgrey)](LICENSE)
-[![Python](https://img.shields.io/badge/3.9.1-Python-blue)](https://www.python.org/)
-[![Django](https://img.shields.io/badge/3.0.13-Django-green)](https://www.djangoproject.com/)
+[![Python](https://img.shields.io/badge/3.9-Python-blue)](https://www.python.org/)
+[![Django](https://img.shields.io/badge/3.0-Django-green)](https://www.djangoproject.com/)
 [![Django Rest Framework](https://img.shields.io/badge/3.12-Rest%20Framework-red)](https://www.django-rest-framework.org/)
 [![Documentation](https://img.shields.io/badge/docs-passing-brightgreen)](https://documenter.getpostman.com/view/2628786/Tz5jf1Ne)
 
@@ -14,8 +14,12 @@ favoritos deles na plataforma.
 
 ### Documentação
 
-Para usar o API e consultar os endpoints acesse a 
-[documentação](https://documenter.getpostman.com/view/2628786/Tz5jf1Ne).
+- [Documentação](https://documenter.getpostman.com/view/2628786/Tz5jf1Ne) 
+  dos endpoints disponíveis nesta API.
+
+- Você também pode importar a *collection de endpoints* para usar no
+  [Postman](https://www.getpostman.com/collections/ddda4b3bba20543e30d8) ou 
+  outro aplicativo de preferência.
 
 
 ### O que você precisa para executar esse projeto?
@@ -59,6 +63,64 @@ Para usar o API e consultar os endpoints acesse a
     - Rodar o comando:
         > make runserver
 
+### Autenticação
+
+Para acessar os recursos fornecidos pela API é necessário a autenticação. Siga 
+o passo a passo abaixo para gerar o token que deve ser usado nas requisições:
+
+- Criar um super usuário com privilégio de administrador
+  - Rodar o comando:
+    > make create-superuser
+
+- Executar o projeto
+  - Rodar o comando:
+    > make runserver
+
+- Acessar o admin
+  - Acessar o link:
+    > http://127.0.0.1:8000/admin/
+
+- Acessar o registro de aplicações
+  - Acessar o link:
+    > http://127.0.0.1:8000/o/applications/register/
+  
+- Cadastrar uma credencial de acesso
+  
+  - **Neste ponto você deve registrar a aplicação que usará a credencial que 
+    será criada.**
+  
+  ```
+  Register a new application
+  
+  Name: <informar o nome da aplicação>
+  Client Id: <não alterar>
+  Client Secret: <não alterar>
+  Client Type: Confidencial
+  Authorization grant type: Resource owner password-based
+  Redirect Uris: <deixar vazio>
+  ```
+
+  - Gerar token:
+    - Substituir as informações pelas obtidas nos passos anteriores
+    ```
+    curl --location --request POST 'http://127.0.0.1:8000/o/token/' \
+    --header 'content-type: application/x-www-form-urlencoded' \
+    --data-urlencode 'grant_type=password' \
+    --data-urlencode 'client_id=<client_id>' \
+    --data-urlencode 'client_secret=<secret_id>' \
+    --data-urlencode 'username=<superuser_username>' \
+    --data-urlencode 'password=<superuser_password>'
+    ```
+
+    O token gerado no passo acima deve ser informado na autorização de todos os 
+    endpoints da API:
+    
+    ```
+     --header 'Authorization: Bearer <token>'
+    ```
+
+    Para mais informações acesse [Django OAuth Toolkit](https://django-oauth-toolkit.readthedocs.io/en/latest/)
+
 
 ### Make
 
@@ -77,6 +139,7 @@ make + comando | descrição
 make check | Verifica aplicação
 make clean | Limpa variáveis de ambiente local
 make create-app | Cria um novo app
+make create-superuser ! Cria super usuário
 make generate-key | Gera uma secret_key
 make help | Lista todos os comandos do make
 make install | Instala as dependências
