@@ -12,3 +12,4 @@ dj_database_url==0.5.0
 structlog==21.1.0
 flake8==3.8.4
 isort==5.7.0
+responses==0.12.1
