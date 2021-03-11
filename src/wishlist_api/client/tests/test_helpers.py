@@ -18,6 +18,6 @@ class TestHelpers:
         with pytest.raises(Http404):
             get_client(pk=2)
 
-    def test_should_return_all_clients(self, add_multi_clients):
+    def test_should_return_all_clients(self, add_three_clients):
         clients = get_all_clients()
         assert len(clients) == 3
