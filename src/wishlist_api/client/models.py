@@ -18,5 +18,5 @@ class Client(models.Model):
             'email': self.email
         }
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '<Client {}>'.format(self.as_dict())

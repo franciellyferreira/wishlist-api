@@ -71,12 +71,12 @@ class ClientRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     permission_classes = [TokenHasReadWriteScope]
     serializer_class = ClientSerializer
 
-    def _update_client(
-            self,
-            client_id: int,
-            request: Any,
-            partial: bool = False
-    ) -> Response:
+    def __update_client(
+        self,
+        client_id: int,
+        request: Any,
+        partial: bool = False
+    ) -> Response:  # pragma: no cover
         client = get_client(pk=client_id)
         serializer = ClientSerializer(
             client,
@@ -113,11 +113,11 @@ class ClientRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
     def put(self, request, *args, **kwargs):
         client_id = self.kwargs['pk']
-        return self._update_client(client_id=client_id, request=request)
+        return self.__update_client(client_id=client_id, request=request)
 
     def patch(self, request, *args, **kwargs):
         client_id = self.kwargs['pk']
-        return self._update_client(
+        return self.__update_client(
             client_id=client_id,
             request=request,
             partial=True

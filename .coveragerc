@@ -1,11 +1,15 @@
 [run]
 omit =
-  *apps.py,
-  *wsgi.py,
-  *pagination.py,
-  *migrations/*,
-  *settings*,
-  *tests/*,
-  *urls.py,
-  *wsgi/*,
-  manage.py
+    *apps.py,
+    *wsgi.py,
+    *pagination.py,
+    *migrations/*,
+    *settings*,
+    *tests/*,
+    *urls.py,
+    *wsgi/*,
+    manage.py
+
+[report]
+exclude_lines =
+    pragma: no cover

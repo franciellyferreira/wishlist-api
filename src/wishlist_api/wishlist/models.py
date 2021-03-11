@@ -25,5 +25,5 @@ class Wishlist(models.Model):
             'product_id': self.product_id
         }
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '<Wishlist {}>'.format(self.as_dict())
