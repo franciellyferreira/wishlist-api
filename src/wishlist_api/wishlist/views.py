@@ -94,29 +94,30 @@ class WishlistListView(ListAPIView):
             )
 
         items = filter_items_wishlist_by_client(client_id=client_id)
-        for item in items:
-            magalu_product = get_product_from_magalu(item.product_id)
-            product = Product(
-                id=magalu_product['id'],
-                title=magalu_product['title'],
-                image=magalu_product['image'],
-                price=magalu_product['price'],
-                brand=magalu_product['brand']
-            )
-            product_list.append(product)
+        if items:
+            for item in items:
+                magalu_product = get_product_from_magalu(item.product_id)
+                product = Product(
+                    id=magalu_product['id'],
+                    title=magalu_product['title'],
+                    image=magalu_product['image'],
+                    price=magalu_product['price'],
+                    brand=magalu_product['brand']
+                )
+                product_list.append(product)
 
-        queryset = self.filter_queryset(product_list)
-        page = self.paginate_queryset(queryset)
-
-        if page is not None:
+            queryset = self.filter_queryset(product_list)
+            page = self.paginate_queryset(queryset)
             serializer = self.get_serializer(page, many=True)
             result = self.get_paginated_response(serializer.data)
             data = result.data
-        else:
-            serializer = self.get_serializer(queryset, many=True)
-            data = serializer.data
 
-        return Response(data=data, status=status.HTTP_200_OK)
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        return Response(
+            {'client_id': 'Wishlist not found.'},
+            status=status.HTTP_404_NOT_FOUND
+        )
 
 
 class WishlistDestroyView(DestroyAPIView):

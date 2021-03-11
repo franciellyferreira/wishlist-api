@@ -1,3 +1,5 @@
+from unittest import mock
+
 import pytest
 from django.http import QueryDict
 from django.urls import reverse
@@ -8,12 +10,23 @@ from rest_framework import status
 
 from wishlist_api.client.views import (
     ClientListCreateView,
-    ClientRetrieveUpdateDestroyView
+    ClientRetrieveUpdateDestroyView,
+    logger
 )
 
 
 @pytest.mark.django_db
 class TestClientViews:
+
+    @pytest.fixture
+    def mock_logger_info(self):
+        with mock.patch.object(logger, 'info') as mock_logger_info:
+            yield mock_logger_info
+
+    @pytest.fixture
+    def mock_logger_warning(self):
+        with mock.patch.object(logger, 'warning') as mock_logger_warning:
+            yield mock_logger_warning
 
     @pytest.fixture
     def setup_authentication(self):
